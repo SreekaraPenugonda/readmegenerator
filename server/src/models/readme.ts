@@ -1,17 +1,23 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 
-// The TypeScript rule map for our data
-interface IReadme {
+export interface IReadme extends Document {
   projectPath: string;
   markdownContent: string;
   createdAt: Date;
+  userId?: string;
+  configOptions: string[];
+  version: number;
+  isFavorite: boolean;
 }
 
-// The MongoDB blueprint map for our data
 const ReadmeSchema = new Schema<IReadme>({
   projectPath: { type: String, required: true },
   markdownContent: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now }
+  createdAt: { type: Date, default: Date.now },
+  userId: { type: String, index: true },
+  configOptions: [{ type: String }],
+  version: { type: Number, default: 1 },
+  isFavorite: { type: Boolean, default: false },
 });
 
 export const Readme = model<IReadme>('Readme', ReadmeSchema);
